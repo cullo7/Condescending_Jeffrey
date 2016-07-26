@@ -1,6 +1,13 @@
 import os
 import sys
 
+def help(choice = 0):
+    if choice == 0:
+        print "Argument required!\n"
+    if choice == 1:
+        print "Sorry I don't recognize the command"
+    print "help yourself, coming soon"
+
 def error(message = None):
     if message is not None:
         print(message)
@@ -18,7 +25,7 @@ def execute_commands(args_in):
     commands = ["where is", "how old is", "how good is", "how can i", "who am i", "i want to see", "tell me about"]
 
     if len(args) == 0:
-	help()
+	help(1)
 
     command = args[0]
     if command == "help":
@@ -45,6 +52,18 @@ def execute_commands(args_in):
 
 
 if __name__ == '__main__':
-	for x in sys.argv:
-		print x + '\n'
-	execute_commands(sys.argv[1:])
+        print "Jeffrey: Hello! My name is Jeffrey, I'm a bot and I was created to answer 'all' your questions.\n"
+        print "         Go ahead, try to stump me.\n"
+        print "         Okay fine, since you asked I'll give you some ideas.\n"
+        print "         Every question you have has to have an ellipses (...) after the question word(s)\n"
+        print "         And before the object. For example here are a couple of acceptable commands:\n"
+        print "         1. where is...Qatar\n"
+        print "         2. how old is...Charlie Sheen\n"
+        print "         3. how good is...Interstellar (It's amazing by the way)\n"
+        print "         Okay you get the idea.\n"
+        print "         I'm still in my robot infancy so I only know the following commands\n"
+        help(2)
+        print "Jeffrey: Alright chief what questions do you have?\n "
+	while True:
+            command = raw_input(">> ")
+	    #execute(command)
