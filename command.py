@@ -1,28 +1,70 @@
+import time
 import os
 import sys
 
+global_commands = {
+    "where is" : "Enter a city here and Jeffrey will tell you what country it is in and on what continent", 
+    "how old is" : "Enter a full name here and Jeffrey will do his best to find their age", 
+    "how good is" : "Enter movie title here", 
+    "how can i" : "Ever been wondering how to do something? Alas enter that 'thing' here and Jeffrey will show you how", 
+    "who am i" : "If you are feeling lost or going through a mid/quarter-life crisis Jeffrey is here to help you", 
+    "i want to see" : "Enter whatever it is that you would like to see pictures of", 
+    "tell me about" : "Enter a subject you are curious about"
+}
+
 def help(choice = 0):
-    if choice == 0:
-        print "Argument required!\n"
     if choice == 1:
+        print "Argument required!\n"
+    if choice == 2:
         print "Sorry I don't recognize the command"
-    print "help yourself, coming soon"
+    print "Here is a list of my possible commands and their how to use them\n"
+    for com in global_commands.keys():
+        print '<{}> : {}'.format(com, global_commands[com])
 
 def error(message = None):
     if message is not None:
         print(message)
     exit(1)
 
-def execute_commands(args_in):
+def where_is(place):
+    pass
+
+def how_old_is(person):
+    pass
+
+def how_good_is(movie):
+    pass
+
+def how_can_i(task):
+    pass
+
+def who_am_i():
+    pass
+
+def i_want_to_see(name):
+    pass
+
+def tell_me_about(thing):
+    pass
+
+def execute(args_in):
     """Ensures user input contains valid commands
     Input:
 	args:
     """
-    args = [arg.lower() for arg in args_in]
+    args = args_in.split("...")
+    print args
 
     # available commands
-    # TODO consider consolidating with help()
-    commands = ["where is", "how old is", "how good is", "how can i", "who am i", "i want to see", "tell me about"]
+    commands = {
+        "where is" : where_is, 
+        "how old is" : how_old_is, 
+        "how good is" : how_good_is, 
+        "how can i" : how_can_i, 
+        "who am i" : who_am_i, 
+        "i want to see" : i_want_to_see, 
+        "tell me about" : tell_me_about
+    }
 
     if len(args) == 0:
 	help(1)
@@ -32,38 +74,33 @@ def execute_commands(args_in):
 	if len(args) > 2:
 	    error("Too many args provided for 'help'")
 	else:
-	    help()
+	    help(2)
 
     if command not in commands:
 	error("Invalid command: '{}'".format(args[0]))
 
-    # Map to command's handler function
-    # Remaining args are passed regardless, dealt with in handler
-    handlers = {
-	    "update" : update_tracker,
-	    "list"   : display_list,
-	    "show"   : show_tracker,
-	    "rename" : rename_tracker,
-	    "delete" : delete_tracker,
-	    "stats"  : display_stats,
-	    "plot"   : display_plot
-	    }
-    handlers[command](args[1:])
+    # Map to command function
+    commands[command](args[1:])
 
 
 if __name__ == '__main__':
-        print "Jeffrey: Hello! My name is Jeffrey, I'm a bot and I was created to answer 'all' your questions.\n"
-        print "         Go ahead, try to stump me.\n"
-        print "         Okay fine, since you asked I'll give you some ideas.\n"
-        print "         Every question you have has to have an ellipses (...) after the question word(s)\n"
-        print "         And before the object. For example here are a couple of acceptable commands:\n"
-        print "         1. where is...Qatar\n"
-        print "         2. how old is...Charlie Sheen\n"
-        print "         3. how good is...Interstellar (It's amazing by the way)\n"
-        print "         Okay you get the idea.\n"
-        print "         I'm still in my robot infancy so I only know the following commands\n"
-        help(2)
-        print "Jeffrey: Alright chief what questions do you have?\n "
+        start = time.clock()
+        print "Condescending Jeffrey: Hello! My name is Jeffrey, I'm a bot and I was created to answer 'all' your questions."
+        print "         Go ahead, try to stump me."
+        print "         Okay fine, since you asked I'll give you some ideas."
+        print "         Every question you have has to have an ellipses (...) after the question word(s)"
+        print "         And before the object. For example here are a couple of acceptable commands:"
+        print "         1. where is...Qatar"
+        print "         2. how old is...Charlie Sheen"
+        print "         3. how good is...Interstellar (It's amazing by the way)"
+        print "         Okay you get the idea."
+        print "         I'm still in my robot infancy so I only know the following commands"
+        help()
+        print "\nJeffrey: Alright chief what questions do you have? "
 	while True:
             command = raw_input(">> ")
-	    #execute(command)
+            if(command == 'quit'):
+                break
+	    execute(command.strip())
+
+        print 'time: {}'.format(time.clock()-start)
