@@ -1,4 +1,4 @@
-import time
+import sqlite3
 import os
 import sys
 
@@ -11,6 +11,16 @@ global_commands = {
     "i want to see" : "Enter whatever it is that you would like to see pictures of", 
     "tell me about" : "Enter a subject you are curious about"
 }
+
+
+db_file = os.path.expanduser("~") + "/.command_history.db"
+commands_db = sqlite3.connect(db_file)
+db = commands_db.cursor()
+db.execute('''CREATE TABLE IF NOT EXISTS commands
+                (command text, id int)''')
+commands_db.commit()
+current_command_id = 0
+history_id = 0
 
 def help(choice = 0):
     if choice == 1:
@@ -38,8 +48,8 @@ def how_good_is(movie):
 def how_can_i(task):
     pass
 
-def who_am_i():
-    pass
+def who_am_i(soul):
+    print "You are snoop doggy dog"
 
 def i_want_to_see(name):
     pass
@@ -52,6 +62,11 @@ def execute(args_in):
     Input:
 	args:
     """
+    if args_in == 'quit':
+        db.execute("DELETE FROM commands")
+        commands_db.commit()
+        exit(1)
+
     args = args_in.split("...")
     print args
 
@@ -84,7 +99,6 @@ def execute(args_in):
 
 
 if __name__ == '__main__':
-        start = time.clock()
         print "Condescending Jeffrey: Hello! My name is Jeffrey, I'm a bot and I was created to answer 'all' your questions."
         print "         Go ahead, try to stump me."
         print "         Okay fine, since you asked I'll give you some ideas."
@@ -99,8 +113,12 @@ if __name__ == '__main__':
         print "\nJeffrey: Alright chief what questions do you have? "
 	while True:
             command = raw_input(">> ")
-            if(command == 'quit'):
-                break
-	    execute(command.strip())
+            
+            # logging commands in SQL database
+            current_command_id +=1
+            db.execute("INSERT INTO commands \
+                        VALUES (?, ?)", (command, current_command_id))
+            commands_db.commit()
 
-        print 'time: {}'.format(time.clock()-start)
+            # then execute command
+            execute(command.strip())
