@@ -1,6 +1,8 @@
+import subprocess
 import sqlite3
 import os
 import sys
+import time
 
 global_commands = {
     "where is" : "Enter a city here and Jeffrey will tell you what country it is in and on what continent", 
@@ -12,8 +14,7 @@ global_commands = {
     "tell me about" : "Enter a subject you are curious about"
 }
 
-
-db_file = os.path.expanduser("~") + "/.command_history.db"
+db_file = ".commands_data.db"
 commands_db = sqlite3.connect(db_file)
 db = commands_db.cursor()
 db.execute('''CREATE TABLE IF NOT EXISTS commands
@@ -59,6 +60,7 @@ def tell_me_about(thing):
 
 def execute(args_in):
     """Ensures user input contains valid commands
+    mmand](args[1:])
     Input:
 	args:
     """
@@ -69,17 +71,6 @@ def execute(args_in):
 
     args = args_in.split("...")
     print args
-
-    # available commands
-    commands = {
-        "where is" : where_is, 
-        "how old is" : how_old_is, 
-        "how good is" : how_good_is, 
-        "how can i" : how_can_i, 
-        "who am i" : who_am_i, 
-        "i want to see" : i_want_to_see, 
-        "tell me about" : tell_me_about
-    }
 
     if len(args) == 0:
 	help(1)
@@ -94,23 +85,52 @@ def execute(args_in):
     if command not in commands:
 	error("Invalid command: '{}'".format(args[0]))
 
-    # Map to command function
-    commands[command](args[1:])
-
+    # Map to available commands
+    commands = {
+        "where is" : where_is, 
+        "how old is" : how_old_is, 
+        "how good is" : how_good_is, 
+        "how can i" : how_can_i, 
+        "who am i" : who_am_i, 
+        "i want to see" : i_want_to_see, 
+        "tell me about" : tell_me_about
+    }[command](args[1:])
 
 if __name__ == '__main__':
-        print "Condescending Jeffrey: Hello! My name is Jeffrey, I'm a bot and I was created to answer 'all' your questions."
-        print "         Go ahead, try to stump me."
-        print "         Okay fine, since you asked I'll give you some ideas."
-        print "         Every question you have has to have an ellipses (...) after the question word(s)"
-        print "         And before the object. For example here are a couple of acceptable commands:"
-        print "         1. where is...Qatar"
-        print "         2. how old is...Charlie Sheen"
-        print "         3. how good is...Interstellar (It's amazing by the way)"
-        print "         Okay you get the idea."
-        print "         I'm still in my robot infancy so I only know the following commands"
+        width = 180
+        '''
+        subprocess.call(['clear'])
+        print "_______ _____   ______  ______  ______   _____  __  __".center(width, " ")
+        print "|_   _| | __|   | ___|  | ___|  | .  |   | __|  \ \/ /".center(width, " ")
+        print "  | |   | |_    | |_    | |_    |___/    | |_    \  / ".center(width, " ")
+        print "  | |   | __|   | __|   | __|   |  _ \   | __|    | | ".center(width, " ")
+        print " _| |   | |_    | |     | |     | | | |  | |_     | | ".center(width, " ")
+        print "|___|   |___|   |_|     |_|     |_| |_|  |___|    |_| ".center(width, " ")
+        print "\n\n"
+        print "Hello! My name is Condescending Jeffrey, I'm a bot and I was created to answer 'all' your questions.".center(width, " ")
+        time.sleep(2.5)
+        print "While at the same time belittling you and making you feel inadequate.".center(width, " ")
+        time.sleep(2.5)
+        print "Go ahead, try to stump me.".center(width, " ")
+        time.sleep(2.5)
+        print "Okay fine, since you asked I'll give you some ideas.".center(width, " ")
+        time.sleep(2.5)
+        print "Every question you have has to have an ellipses (...) after the question word(s)".center(width, " ")
+        time.sleep(2.5)
+        print "And before the object. For example here are a couple of acceptable commands:".center(width, " ")
+        time.sleep(2.5)
+        print "1. where is...Qatar".center(width, " ")
+        print "2. how old is...Charlie Sheen".center(width, " ")
+        print "3. how good is...Interstellar (It's amazing by the way)".center(width, " ")
+        time.sleep(2.5)
+        print "Okay you get the idea.".center(width, " ")
+        time.sleep(2.5)
+        print "I'm still in my robot infancy so I only know the following commands".center(width, " ")
+        time.sleep(2.5)
         help()
-        print "\nJeffrey: Alright chief what questions do you have? "
+        time.sleep(2.5)
+        '''
+        print "\nJeffrey: Alright chief what questions do you have? ".center(width, " ")
 	while True:
             command = raw_input(">> ")
             
