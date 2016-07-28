@@ -15,6 +15,8 @@ command_desc = {
     "tell me about" : "Enter a subject you are curious about",
     "show my history" : "If you ever want to see the history of all your commands",
     "choose command" : "Choose a command from your history to execute again",
+    "inspire me" : "Returns an inspirational quote to brighten your day",
+    "get insult" : "Returns a smashing insult if you're in need",
     "help" : "self explanatory"
 }
 
@@ -29,29 +31,36 @@ current_command_id = 0
 def help(choice = 0):
     if choice == 1:
         print "You need to enter three dots and an argument, its so easy, just do it"
+        little_help()
     else:
         print "Here is a list of my possible commands and their how to use them"
         for com in command_desc.keys():
             print '<{}> : {}'.format(com, command_desc[com])
+        print "Remember each question and noun/verb should be separate by an ellipses like so.."
         print "Format: [Question word(s)]...[noun/verb]"
 
-def get_history():
+def little_help():
+    time.sleep(1)
+    print "Bruh, the format is this -> [Question word(s)]...[noun/verb]"
+    time.sleep(1)
+    print "Enter help and I'll show you what I got in my arsenal if you want"    
+    time.sleep(1)
+
+def get_history(nothing):
+    if len(nothing) != 0:
+        print "I'll let this one slide, but next time don't add arguments to show my history, Imbecile!"
     print "get history"
     db.execute("SELECT * FROM commands") 
     rows = db.fetchall()
     for row in rows:
-        for col in row:
-            print "%s," % col
-        print "\n"
+        print '{}. {}'.format(row[1], row[0])
+        print ""
 
 def choose_history(num):
     print "choose history"
     db.execute("SELECT command FROM commands WHERE id = (?)", num)
-    rows = db.fetchall()
-    for row in rows:
-        for col in row:
-            print "%s," % col
-        print "\n"
+    row = db.fetchone()
+    execute(row[0])
 
 def execute(args_in):
     """
@@ -68,7 +77,8 @@ def execute(args_in):
     current_command_id +=1
     db.execute("INSERT INTO commands \
                 VALUES (?, ?)", (args_in, current_command_id))
-
+    commands_db.commit()
+    
     command_functions = {
         "where is" : fn.where_is, 
         "how old is" : fn.how_old_is, 
@@ -79,10 +89,11 @@ def execute(args_in):
         "tell me about" : fn.tell_me_about,
         "show my history" : get_history,
         "choose command" : choose_history,
+        "get insult" : get_insult,
+        "inspire me" : inspire_me
     }
 
     args = args_in.split("...")
-    print args
 
     command = args[0]
     if command not in command_functions.keys():
@@ -94,8 +105,5 @@ def execute(args_in):
 	    fn.error("Don't put arguments after 'help', dingus")
 	else:
 	    help()
-    else: 
-        if len(args[1]) == 0:
-            command_functions[command]()
-        else:    
-            command_functions[command](args[1:])
+    else:     
+        command_functions[command](args[1:])

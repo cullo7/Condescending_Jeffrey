@@ -1,4 +1,5 @@
 import subprocess
+import sys
 import time
 import commands as cmd
 
@@ -38,7 +39,8 @@ if __name__ == '__main__':
         '''
         print "\nJeffrey: Alright chief what questions do you have? ".center(width, " ")
 	while True:
-            command = raw_input(">> ")
+            command = raw_input("You: ")
             
             # execute command
+            sys.stdout.write('Jeffrey: ')
             cmd.execute(command.strip())
