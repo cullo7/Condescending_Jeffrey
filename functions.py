@@ -3,22 +3,22 @@ def error(message = None):
         print(message)
 
 def where_is(place):
-    pass
+   print "Where is" 
 
 def how_old_is(person):
-    pass
+    print "how old is"
 
 def how_good_is(movie):
-    pass
+    print "how good is"
 
 def how_can_i(task):
-    pass
+    print "how can i"
 
-def who_am_i(soul):
+def who_am_i():
     print "You are snoop doggy dog"
 
 def i_want_to_see(name):
-    pass
+    print "i want to see"
 
 def tell_me_about(thing):
-    pass
+    print "tell me about it"

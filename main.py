@@ -1,9 +1,6 @@
-import functions as f
 import subprocess
-import sqlite3
-import os
-import sys
 import time
+import commands as cmd
 
 if __name__ == '__main__':
         width = 180
@@ -43,11 +40,5 @@ if __name__ == '__main__':
 	while True:
             command = raw_input(">> ")
             
-            # logging commands in SQL database
-            current_command_id +=1
-            db.execute("INSERT INTO commands \
-                        VALUES (?, ?)", (command, current_command_id))
-            commands_db.commit()
-
-            # then execute command
-            execute(command.strip())
+            # execute command
+            cmd.execute(command.strip())
