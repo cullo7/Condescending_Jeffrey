@@ -28,23 +28,18 @@ db.execute('''CREATE TABLE IF NOT EXISTS commands
 commands_db.commit()
 current_command_id = 0
 
-def help(choice = 0):
-    if choice == 1:
-        print "You need to enter three dots and an argument, its so easy, just do it"
-        little_help()
-    else:
-        print "Here is a list of my possible commands and their how to use them"
-        for com in command_desc.keys():
-            print '<{}> : {}'.format(com, command_desc[com])
-        print "Remember each question and noun/verb should be separate by an ellipses like so.."
-        print "Format: [Question word(s)]...[noun/verb]"
-
-def little_help():
-    time.sleep(1)
-    print "Bruh, the format is this -> [Question word(s)]...[noun/verb]"
-    time.sleep(1)
-    print "Enter help and I'll show you what I got in my arsenal if you want"    
-    time.sleep(1)
+def help():
+    print "Here is a list of my possible commands and their how to use them"
+    print ""
+    print "_"*123
+    print "*"+(123*" ")+"*"
+    for com in command_desc.keys():
+        print '*    ~{}~ : {}'.format(com, command_desc[com])+ ((114-(len(com)+ len(command_desc[com])))*" ")+ "*"
+    print "*"+(123*" ")+"*"
+    print "*"+("_"*123)+"*"
+    print ""
+    print "Remember each question and noun/verb should be separate by an ellipses like so.."
+    print "Format: [Question word(s)]...[noun/verb]"
 
 def get_history(nothing):
     if len(nothing) != 0:
@@ -62,6 +57,27 @@ def choose_history(num):
     row = db.fetchone()
     execute(row[0])
 
+def check_suggestions(attempt):
+    attempt = attempt.split(" ")
+    if attempt[0] == 'how':
+        print "did you mean 'how old is...', 'how can i...', or 'how good is...'?"
+    elif attempt[0] == 'where':
+        print "did you mean 'where is...'?"
+    elif attempt[0] == 'get':
+        print "did you mean 'get insult...'?"
+    elif attempt[0] == 'i':
+        print "did you mean 'i want to see...'?"
+    elif attempt[0] == 'tell':
+        print "did you mean 'tell me about...'?"
+    elif attempt[0] == 'inspire':
+        print "did you mean 'inspire me...'?"
+    elif attempt[0] == 'choose':
+        print "did you mean 'choose history...'?"
+    elif attempt[0] == 'show':
+        print "did you mean 'show my history...'?"
+    elif attempt[0] == 'who':
+        print "did you mean 'who am i...'?"
+
 def execute(args_in):
     """
         Handles command by either throwing an exception or calling
@@ -70,6 +86,7 @@ def execute(args_in):
     if args_in == 'quit':
         db.execute("DELETE FROM commands")
         commands_db.commit()
+        print "Peace out girl scout"
         exit(1)
     
     # logging commands in SQL database
@@ -89,8 +106,8 @@ def execute(args_in):
         "tell me about" : fn.tell_me_about,
         "show my history" : get_history,
         "choose command" : choose_history,
-        "get insult" : get_insult,
-        "inspire me" : inspire_me
+        "get insult" : fn.get_insult,
+        "inspire me" : fn.inspire_me
     }
 
     args = args_in.split("...")
@@ -98,12 +115,14 @@ def execute(args_in):
     command = args[0]
     if command not in command_functions.keys():
         fn.error("Invalid command: '{}'".format(args[0]))
+        check_suggestions(args[0])
     elif len(args) == 1:
-	help(1)
+        fn.error("You need to enter three dots and an argument, its so easy, just do it")
     elif command == "help":
 	if len(args) > 2:
 	    fn.error("Don't put arguments after 'help', dingus")
 	else:
 	    help()
     else:     
-        command_functions[command](args[1:])
+        command_functions[command](args[1])
+

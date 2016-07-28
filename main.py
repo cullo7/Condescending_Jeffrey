@@ -1,19 +1,21 @@
+from termcolor import colored
 import subprocess
 import sys
 import time
 import commands as cmd
 
 if __name__ == '__main__':
-        width = 180
+        width = 200
+        color = 'blue'
         '''
         subprocess.call(['clear'])
-        print "_______ _____   ______  ______  ______   _____  __  __".center(width, " ")
-        print "|_   _| | __|   | ___|  | ___|  | .  |   | __|  \ \/ /".center(width, " ")
-        print "  | |   | |_    | |_    | |_    |___/    | |_    \  / ".center(width, " ")
-        print "  | |   | __|   | __|   | __|   |  _ \   | __|    | | ".center(width, " ")
-        print " _| |   | |_    | |     | |     | | | |  | |_     | | ".center(width, " ")
-        print "|___|   |___|   |_|     |_|     |_| |_|  |___|    |_| ".center(width, " ")
-        print "\n\n"
+        print colored("_______ _____   ______  ______  ______   _____  __  __", color).center(width, " ")
+        print colored("|_   _| | __|   | ___|  | ___|  | .  |   | __|  \ \/ /", color).center(width, " ")
+        print colored("  | |   | |_    | |_    | |_    |___/    | |_    \  / ", color).center(width, " ")
+        print colored("  | |   | __|   | __|   | __|   |  _ \   | __|    | | ", color).center(width, " ")
+        print colored(" _| |   | |_    | |     | |     | | | |  | |_     | | ", color).center(width, " ")
+        print colored("|___|   |___|   |_|     |_|     |_| |_|  |___|    |_| ", color).center(width, " ")
+        print "\n"
         print "Hello! My name is Condescending Jeffrey, I'm a bot and I was created to answer 'all' your questions.".center(width, " ")
         time.sleep(2.5)
         print "While at the same time belittling you and making you feel inadequate.".center(width, " ")
@@ -34,13 +36,14 @@ if __name__ == '__main__':
         time.sleep(2.5)
         print "I'm still in my robot infancy so I only know the following commands".center(width, " ")
         time.sleep(2.5)
-        help()
+        cmd.help()
         time.sleep(2.5)
+        print "\n[Jeffrey]: Alright chief what questions do you have? ".center(width, " ")
         '''
-        print "\nJeffrey: Alright chief what questions do you have? ".center(width, " ")
 	while True:
-            command = raw_input("You: ")
-            
+            command = raw_input("[You]: ")
+           
+            # preced Jeffrey speaking with his name
+            sys.stdout.write('[Jeffrey]: ')
             # execute command
-            sys.stdout.write('Jeffrey: ')
-            cmd.execute(command.strip())
+            cmd.execute(command.strip().lower())

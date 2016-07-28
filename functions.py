@@ -1,12 +1,26 @@
 from lxml import html
 import requests
 import random
-import commands as cmd
+
+temper = 0
 
 def error(message = None):
+    global temper
+    temper +=1
     if message is not None:
         print(message)
-        cmd.little_help()
+    if temper > 2:
+        print "Just keep on getting on my nerves"
+    elif temper > 5:
+        print "Do you know how to type?"
+    elif temper > 8:
+        print "You vile beast, you should be ashamed of yourself"
+    elif temper > 10:
+        print "Get the hello out of here and come back when you have a brain cell in your puny brain, you make me sick"
+
+def decrement_temper():
+    global temper
+    temper -=1
 
 def where_is(place):
    print "Where is" 
@@ -18,9 +32,10 @@ def how_good_is(movie):
     if len(movie) == 0:
         error("How good is what? Give me a movie name nextime, Jackass")
     else:
+        decrement_temper()
         page = requests.get('https://www.rottentomatoes.com/search/?search=interstellar')
         tree = html.fromstring(page.content)
-        ext_link = tree.xpath('//ul[@id="movie_results_ul"]/li[1]/div[@class="media-body media-body-alt"]/div[@class="nomargin media-heading bold"]/a[@class="nomargin media-heading bold"]@href')
+        ext_link = tree.xpath('//ul[@id="movie_results_ul"]/li[1]') #/div[@class="media-body media-body-alt"]/div[@class="nomargin media-heading bold"]/a[@class="nomargin media-heading bold"]@href')
         print ext_link
         print "how good is"
 
@@ -30,9 +45,11 @@ def how_can_i(task):
 def who_am_i(nothing):
     if nothing == 'kemosabe':
         print "Justice is what I seek Kemosabe.."
-    elif len(nothing[0]) != 0:
+        decrement_temper()
+    elif len(nothing) != 0:
         error("who am i doesn't take any arguments!")
     else:    
+        decrement_temper()
         responses = [
             "You are Snoop Doggy Dog",
             "You are a raisin in the sun brother",
