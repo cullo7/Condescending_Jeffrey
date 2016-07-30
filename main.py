@@ -4,6 +4,12 @@ import sys
 import time
 import commands as cmd
 
+'''
+Main method that calls upon external files to execute functions. Otherwise it runs a while loop until it breaks 
+or quit is entered. Introduces itself to user and briefs user with list of commands and a rundown of the programs
+capabilities
+'''
+
 if __name__ == '__main__':
         width = 200
         color = 'blue'
@@ -45,5 +51,12 @@ if __name__ == '__main__':
            
             # preced Jeffrey speaking with his name
             sys.stdout.write('[Jeffrey]: ')
+            
+            # Jeffrey says something if nothing is entered
+            if len(command.strip()) == 0:
+                print "say something muchacho"
+                continue
+
             # execute command
             cmd.execute(command.strip().lower()) 
+            # cmd.execute("how can i...light a candle".lower())

@@ -1,12 +1,19 @@
 from lxml import html
+import webbrowser
 import requests
 import random
 import urllib2 as urllib
+import PIL
 from PIL import Image
 from cStringIO import StringIO
 
+'''
+Contains all the command functions. Each method has an error check to avoid the program breaking.
+'''
+
 temper = 0
 
+# prints error and assesses how angry Jeff is
 def error(message = None):
     global temper
     temper +=1
@@ -25,12 +32,15 @@ def decrement_temper():
     global temper
     temper -=1
 
+# finds the country and continent of a chosen city
 def where_is(place):
    print "Where is" 
 
+# finds the age of a celeb
 def how_old_is(person):
     print "how old is"
 
+# searches for movie and returns short summary and crtic scores
 def how_good_is(movie):
     if len(movie) == 0:
         error("How good is what? Give me a movie name nextime, Jackass")
@@ -38,29 +48,48 @@ def how_good_is(movie):
         decrement_temper()
         page = requests.get('https://www.rottentomatoes.com/search/?search='+movie)
         tree = html.fromstring(page.content)
-        ext_link = tree.xpath('//ul[@id="movie_results_ul"]/li[1]/div[@class="media-body media-body-alt"]/div[@class="nomargin media-heading bold"]/a[@class="unstyled articleLink"]/@href')
-        ext_link = ext_link[0]
-        print 'https://www.rottentomatoes.com'+ext_link
-        page = requests.get('https://www.rottentomatoes.com'+ext_link)
-        tree = html.fromstring(page.content)
-        image = raw_input("enter any key to see the image, just press enter to skip to Synopsis")
-        if len(image) != 0:
-            print "image "+ str(tree.xpath('//img[@class="posterImage"]/@src'))
-            img_file = urllib.urlopen(tree.xpath('//img[@class="posterImage"]/@src')[0])
-            im = StringIO(img_file.read())
-            im = Image.open(im)
-            im.show()
-        print "Title: "+ str(tree.xpath('//meta[@property="og:title"]/@content')[0])
-        print "Summary: "+str(tree.xpath('//p[@class="critic_consensus superPageFontColor"]/text()')[2])
-        print "Critics Score: "+str(tree.xpath('//span[@class="meter-value superPageFontColor"]/span/text()')[0])
-        print "Top Critics Score: "+str(tree.xpath('//span[@class="meter-value superPageFontColor"]/span/text()')[1])
+        if len(tree.xpath('//h1[@class="center noresults"]/text()')) == 0:
+            ext_link = tree.xpath('//ul[@id="movie_results_ul"]/li[1]/div[@class="media-body media-body-alt"]/div[@class="nomargin media-heading bold"]/a[@class="unstyled articleLink"]/@href')
+            ext_link = ext_link[0]
+            print 'https://www.rottentomatoes.com'+ext_link
+            page = requests.get('https://www.rottentomatoes.com'+ext_link)
+            tree = html.fromstring(page.content)
+            image = raw_input("enter any key to see the image, just press enter to skip to Synopsis")
+            if len(image) != 0:
+                print "image "+ str(tree.xpath('//img[@class="posterImage"]/@src'))
+                img_file = urllib.urlopen(tree.xpath('//img[@class="posterImage"]/@src')[0])
+                im = StringIO(img_file.read())
+                im = Image.open(im)
+                im.show()
+            print "Title: "+ str(tree.xpath('//meta[@property="og:title"]/@content')[0])
+            print "Summary: "+str(tree.xpath('//p[@class="critic_consensus superPageFontColor"]/text()')[2])
+            print "Critics Score: "+str(tree.xpath('//span[@class="meter-value superPageFontColor"]/span/text()')[0])
+            print "Top Critics Score: "+str(tree.xpath('//span[@class="meter-value superPageFontColor"]/span/text()')[1])
+        else:
+            print str(tree.xpath('//h1[@class="center noresults"]/text()')[0])
 
+# queries youtube for users 'how to' request and launches a webbrowser with the url of the first result
 def how_can_i(task):
-    print "how can i"
+    print "task "+task
+    if len(task) == 0:
+        print "Gotta enter a task squire"
+    else:
+        print 'https://www.youtube.com/results?search_query='+'how to '+task
+        page = requests.get('https://www.youtube.com/results?search_query='+'how to '+task)
+        tree = html.fromstring(page.content)
+        if len(tree.xpath('//div[@class="search-message"]/text()')) == 0:
+            vid_url = tree.xpath('//ol[@class="item-section"]/li[1]/div/div/div[1]/a/@href')[0]
+            webbrowser.open_new('https://www.youtube.com'+vid_url)
+            print "Here's how you do that"
+        else:
+            print "No results for "+str(tree.xpath('//div[@class="search-message"]/b/text()')[0])
 
+# Answers the traditional coming of age question
 def who_am_i(nothing):
     if nothing == 'kemosabe':
         print "Justice is what I seek Kemosabe.."
+        decrement_temper()
+        decrement_temper()
         decrement_temper()
     elif len(nothing) != 0:
         error("who am i doesn't take any arguments!")
@@ -73,23 +102,33 @@ def who_am_i(nothing):
         ]
         print responses[random.randint(0,2)]
 
+# Finds the image you want to see on google and returns a shittier version of it basically..
 def i_want_to_see(name):
     page = requests.get('https://www.google.com/search?q='+name+'&source=lnms&tbm=isch')
-    print tree.xpath('//div[@data-ri=0]/a/img/@src')[0]
-    img_file = urllib.urlopen(tree.xpath('//div[@data-ri=0]/a/img/@src')[0])
-    im = StringIO(img_file.read())
-    im = Image.open(im)
-    im.show()
-    print "i want to see"
+    tree = html.fromstring(page.content)
+    not_found = tree.xpath('//div[@style="font-size:16px;padding-left:10px"]/p/b/text()')
+    if len(not_found) == 0:
+        imgURL =  tree.xpath('//table[@class="images_table"]/tr[1]/td[1]/a/img/@src')[0]
+        img_file = urllib.urlopen(imgURL)
+        im = StringIO(img_file.read())
+        img = Image.open(im)
+        img.show()
+        print "As you wish.."
+    else:
+        print "Your search - "+str(not_found[0])+" - did not match any documents"
 
+# might scrap this, kinda vague
 def tell_me_about(thing):
     print "tell me about it"
 
+# Finds random inspirational quotes
 def inspire_me(nothing):
     if len(nothing[0]) != 0:
         error("inspire me doesn't take any argument man")
     else:
         print "You're worthless, hows that"
+
+# returns an insult when you need one
 def get_insult(nothing):
     if len(nothing[0]) != 0:
         error("get insult doesn't take any arguments knave")

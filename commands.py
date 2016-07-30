@@ -5,6 +5,15 @@ import os
 import sys
 import time
 
+'''
+
+Contains database commands and interaction. Also handles execution of command entered by either
+delegating to function file or by refusing it due to improper syntax. Finally, contains a method
+to help user by suggesting the mistake in the command
+
+'''
+
+# descriptions
 command_desc = {
     "where is" : "Enter a city here and Jeffrey will tell you what country it is in and on what continent", 
     "how old is" : "Enter a full name here and Jeffrey will do his best to find their age", 
@@ -14,12 +23,12 @@ command_desc = {
     "i want to see" : "Enter whatever it is that you would like to see pictures of", 
     "tell me about" : "Enter a subject you are curious about",
     "show my history" : "If you ever want to see the history of all your commands",
-    "choose command" : "Choose a command from your history to execute again",
     "inspire me" : "Returns an inspirational quote to brighten your day",
     "get insult" : "Returns a smashing insult if you're in need",
     "help" : "self explanatory"
 }
 
+# initiate database
 db_file = ".commands_data.db"
 commands_db = sqlite3.connect(db_file)
 db = commands_db.cursor()
@@ -28,6 +37,7 @@ db.execute('''CREATE TABLE IF NOT EXISTS commands
 commands_db.commit()
 current_command_id = 0
 
+# lists possible commands and their format, rudely
 def help():
     print "Here is a list of my possible commands and their how to use them"
     print ""
@@ -41,6 +51,7 @@ def help():
     print "Remember each question and noun/verb should be separate by an ellipses like so.."
     print "Format: [Question word(s)]...[noun/verb]"
 
+# lists commands entered, from database
 def get_history(nothing):
     if len(nothing) != 0:
         print "I'll let this one slide, but next time don't add arguments to show my history, Imbecile!"
@@ -51,12 +62,7 @@ def get_history(nothing):
         print '{}. {}'.format(row[1], row[0])
         print ""
 
-def choose_history(num):
-    print "choose history"
-    db.execute("SELECT command FROM commands WHERE id = (?)", num)
-    row = db.fetchone()
-    execute(row[0])
-
+# checks command attempt and tries to suggest what user was trying to enter
 def check_suggestions(attempt):
     attempt = attempt.split(" ")
     if attempt[0] == 'how':
@@ -80,6 +86,7 @@ def check_suggestions(attempt):
     if "..." not in attempt:
         print "You're missing an ellipses ('...')" 
 
+# executed on every method, processes command
 def execute(args_in):
     """
         Handles command by either throwing an exception or calling
@@ -107,7 +114,6 @@ def execute(args_in):
         "i want to see" : fn.i_want_to_see, 
         "tell me about" : fn.tell_me_about,
         "show my history" : get_history,
-        "choose command" : choose_history,
         "get insult" : fn.get_insult,
         "inspire me" : fn.inspire_me
     }
@@ -127,4 +133,3 @@ def execute(args_in):
 	    help()
     else:     
         command_functions[command](args[1])
-
