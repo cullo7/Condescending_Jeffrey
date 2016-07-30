@@ -78,7 +78,8 @@ def how_can_i(task):
         page = requests.get('https://www.youtube.com/results?search_query='+'how to '+task)
         tree = html.fromstring(page.content)
         if len(tree.xpath('//div[@class="search-message"]/text()')) == 0:
-            vid_url = tree.xpath('//ol[@class="item-section"]/li[1]/div/div/div[1]/a/@href')[0]
+            vid_url = tree.xpath('//ol[@class="item-section"]//div[@class="yt-lockup-dismissable yt-uix-tile"][1]/div[1]/a/@href')[0]
+            print vid_url
             webbrowser.open_new('https://www.youtube.com'+vid_url)
             print "Here's how you do that"
         else:

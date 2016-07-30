@@ -5,7 +5,8 @@ in a rude way. Another crucial attribute of Jerry is that he can handle almost a
 
 ###Details:
 * Commands have to be formatted: [Commmand]...[noun/verb]
-* To stop program simply enter 'quit'
+* All commands are stored in sqlite3 database
+* To stop program simply enter 'quit' (this flushes command history)
 * Jeffrey has a 'temper' that will increase when you enter incorrect commands and decrease with correct ones
 
 ###Commands:
@@ -37,5 +38,8 @@ in a rude way. Another crucial attribute of Jerry is that he can handle almost a
 * Pillow
 
 > Dependencies can be installed with pip or found online
+
+###Run:
+* python main.py or ./run.sh
 
 Written by Aiden Cullo

@@ -1,3 +1,3 @@
-python main.py
+python main.py -a
 rm *.pyc
 

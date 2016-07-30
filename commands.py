@@ -11,7 +11,12 @@ Contains database commands and interaction. Also handles execution of command en
 delegating to function file or by refusing it due to improper syntax. Finally, contains a method
 to help user by suggesting the mistake in the command
 
+TODO:
+add event catcher for up arrow to get last command
+
 '''
+
+
 
 # descriptions
 command_desc = {
@@ -21,7 +26,6 @@ command_desc = {
     "how can i" : "Ever been wondering how to do something? Alas enter that 'thing' here and Jeffrey will show you how", 
     "who am i" : "If you are feeling lost or going through a mid/quarter-life crisis Jeffrey is here to help you", 
     "i want to see" : "Enter whatever it is that you would like to see pictures of", 
-    "tell me about" : "Enter a subject you are curious about",
     "show my history" : "If you ever want to see the history of all your commands",
     "inspire me" : "Returns an inspirational quote to brighten your day",
     "get insult" : "Returns a smashing insult if you're in need",
@@ -112,7 +116,6 @@ def execute(args_in):
         "how can i" : fn.how_can_i, 
         "who am i" : fn.who_am_i, 
         "i want to see" : fn.i_want_to_see, 
-        "tell me about" : fn.tell_me_about,
         "show my history" : get_history,
         "get insult" : fn.get_insult,
         "inspire me" : fn.inspire_me
