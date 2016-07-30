@@ -10,7 +10,7 @@ in a rude way. Another crucial attribute of Jerry is that he can handle almost a
 
 ###Commands:
 | Command         | Function                            | Example                     |
-| ----------------|:-----------------------------------:|----------------------------:|
+| ----------------|:-----------------------------------:|-----------------------------|
 | where is        | finds country and continent of city | where is...Quebec           |
 | how old is      | finds age of person                 | how old is...Charelie Sheen |
 | how good is     | returns rating of movie             | how good is...Interstellar  |
