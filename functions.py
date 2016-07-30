@@ -1,6 +1,9 @@
 from lxml import html
 import requests
 import random
+import urllib2 as urllib
+from PIL import Image
+from cStringIO import StringIO
 
 temper = 0
 
@@ -33,11 +36,24 @@ def how_good_is(movie):
         error("How good is what? Give me a movie name nextime, Jackass")
     else:
         decrement_temper()
-        page = requests.get('https://www.rottentomatoes.com/search/?search=interstellar')
+        page = requests.get('https://www.rottentomatoes.com/search/?search='+movie)
         tree = html.fromstring(page.content)
-        ext_link = tree.xpath('//ul[@id="movie_results_ul"]/li[1]') #/div[@class="media-body media-body-alt"]/div[@class="nomargin media-heading bold"]/a[@class="nomargin media-heading bold"]@href')
-        print ext_link
-        print "how good is"
+        ext_link = tree.xpath('//ul[@id="movie_results_ul"]/li[1]/div[@class="media-body media-body-alt"]/div[@class="nomargin media-heading bold"]/a[@class="unstyled articleLink"]/@href')
+        ext_link = ext_link[0]
+        print 'https://www.rottentomatoes.com'+ext_link
+        page = requests.get('https://www.rottentomatoes.com'+ext_link)
+        tree = html.fromstring(page.content)
+        image = raw_input("enter any key to see the image, just press enter to skip to Synopsis")
+        if len(image) != 0:
+            print "image "+ str(tree.xpath('//img[@class="posterImage"]/@src'))
+            img_file = urllib.urlopen(tree.xpath('//img[@class="posterImage"]/@src')[0])
+            im = StringIO(img_file.read())
+            im = Image.open(im)
+            im.show()
+        print "Title: "+ str(tree.xpath('//meta[@property="og:title"]/@content')[0])
+        print "Summary: "+str(tree.xpath('//p[@class="critic_consensus superPageFontColor"]/text()')[2])
+        print "Critics Score: "+str(tree.xpath('//span[@class="meter-value superPageFontColor"]/span/text()')[0])
+        print "Top Critics Score: "+str(tree.xpath('//span[@class="meter-value superPageFontColor"]/span/text()')[1])
 
 def how_can_i(task):
     print "how can i"
@@ -58,6 +74,12 @@ def who_am_i(nothing):
         print responses[random.randint(0,2)]
 
 def i_want_to_see(name):
+    page = requests.get('https://www.google.com/search?q='+name+'&source=lnms&tbm=isch')
+    print tree.xpath('//div[@data-ri=0]/a/img/@src')[0]
+    img_file = urllib.urlopen(tree.xpath('//div[@data-ri=0]/a/img/@src')[0])
+    im = StringIO(img_file.read())
+    im = Image.open(im)
+    im.show()
     print "i want to see"
 
 def tell_me_about(thing):

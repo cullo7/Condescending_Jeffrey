@@ -77,6 +77,8 @@ def check_suggestions(attempt):
         print "did you mean 'show my history...'?"
     elif attempt[0] == 'who':
         print "did you mean 'who am i...'?"
+    if "..." not in attempt:
+        print "You're missing an ellipses ('...')" 
 
 def execute(args_in):
     """
@@ -115,7 +117,7 @@ def execute(args_in):
     command = args[0]
     if command not in command_functions.keys():
         fn.error("Invalid command: '{}'".format(args[0]))
-        check_suggestions(args[0])
+        check_suggestions(args_in)
     elif len(args) == 1:
         fn.error("You need to enter three dots and an argument, its so easy, just do it")
     elif command == "help":

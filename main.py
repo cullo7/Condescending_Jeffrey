@@ -46,4 +46,4 @@ if __name__ == '__main__':
             # preced Jeffrey speaking with his name
             sys.stdout.write('[Jeffrey]: ')
             # execute command
-            cmd.execute(command.strip().lower())
+            cmd.execute(command.strip().lower()) 
