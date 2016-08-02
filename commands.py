@@ -21,11 +21,12 @@ command_desc = {
     "how can i" : "Ever been wondering how to do something? Alas enter that 'thing' here and Jeffrey will show you how", 
     "who am i" : "If you are feeling lost or going through a mid/quarter-life crisis Jeffrey is here to help you", 
     "i want to see" : "Enter whatever it is that you would like to see pictures of", 
-    "show my history" : "If you ever want to see the history of all your commands",
+    "show history" : "If you ever want to see the history of all your commands",
     "inspire me" : "Returns an inspirational quote to brighten your day",
     "get insult" : "Returns a smashing insult if you're in need",
     "help" : "self explanatory",
     "clear history" : "clear history currently stored in database",
+    "execute history" : "executes a certain command in your command history"
 }
 
 # initiate database
@@ -36,7 +37,6 @@ db.execute('''CREATE TABLE IF NOT EXISTS commands
                 (command text, id int)''')
 commands_db.commit()
 current_command_id = 0
-command_count = 0
 
 # lists possible commands and their format, rudely
 def help():
@@ -63,46 +63,46 @@ def get_history(nothing):
         print '{}. {}'.format(row[1], row[0])
         print ""
 
-def get_last_command():
-    global current_command_id
-    if current_command_id == 0:
-        print "Earliest Command"
-    else:
-        current_command_id -=1
-        return get_command(current_command_id)
-
-def get_next_command():
-    global current_command_id
-    if current_command_id == command_count:
-        print "Already at latest command slick"
-    else:
-        current_command_id +=1
-        return get_command(current_command_id)
-
 def get_command(index):
-    db.execute("SELECT command FROM commands WHERE id = (?)", (index)) 
-    com = db.fetchone()
-    print str(com)
-    return com
+    if len(index)  == 0:
+        print "Please enter a index"
+    else:
+        if int(index) >= 0 and int(index) < current_command_id:
+            db.execute("SELECT command FROM commands WHERE id = (?)", (index)) 
+            com = db.fetchone()
+            com =  str(com[0])
+            if 'execute' in com:
+                print "cannot excute this command, it will go on recursively"
+            else:
+                execute(com)
+        else:
+            print "no command in history with index"
 
 def increment_command_count():
     global current_command_id
     current_command_id+=1    
-    global command_count
-    command_count+=1
 
-def clear_history():
-    db.execute("DELETE FROM commands")
-    commands_db.commit()
-    print "Clearing history...are you trying to hide something?"
-    time.sleep(2)
-    print "Calling 911..."
-    time.sleep(2)
-    print "Just Kidding"
+def zero_command_id():
+    global current_command_id
+    current_command_id = 0
 
+def clear_history(nothing):
+    if len(nothing) != 0 and nothing != 'no message':
+        print "clear histtory doesn't take any arguments"
+    else:
+        db.execute("DELETE FROM commands")
+        commands_db.commit()
+        if nothing != 'no message':
+            print "Clearing history...are you trying to hide something?"
+            time.sleep(2)
+            print "Calling 911..."
+            time.sleep(2)
+            print "Just Kidding"
+        zero_command_id()
+        
 # checks command attempt and tries to suggest what user was trying to enter
-def check_suggestions(attempt):
-    attempt = attempt.split(" ")
+def check_suggestions(comstr):
+    attempt = comstr.split(" ")
     if attempt[0] == 'how':
         print "did you mean 'how old is...', 'how can i...', or 'how good is...'?"
     elif attempt[0] == 'where':
@@ -123,7 +123,11 @@ def check_suggestions(attempt):
         print "did you mean 'who am i...'?"
     elif attempt[0] == 'clear':
         print "did you clear history...'?"
-    if "..." not in attempt:
+    elif attempt[0] == 'execute':
+        print "did you mean execute history...?"
+    elif 'history' in comstr:
+        print "did you mean clear history..., show history... or execute history...?"
+    elif "..." not in comstr:
         print "You're missing an ellipses ('...')" 
 
 # executed on every method, processes command
@@ -136,8 +140,10 @@ def execute(args_in):
         db.execute("DELETE FROM commands")
         commands_db.commit()
         print "Peace out girl scout"
+        zero_command_id()
+        clear_history('no message')
         exit(1)
-    
+   
     # logging commands in SQL database
     increment_command_count()
     db.execute("INSERT INTO commands \
@@ -151,10 +157,11 @@ def execute(args_in):
         "how can i" : fn.how_can_i, 
         "who am i" : fn.who_am_i, 
         "i want to see" : fn.i_want_to_see, 
-        "show my history" : get_history,
+        "show history" : get_history,
         "get insult" : fn.get_insult,
         "inspire me" : fn.inspire_me,
-        "clear history" : clear_history
+        "clear history" : clear_history,
+        "execute history" : get_command
     }
 
     args = args_in.split("...")

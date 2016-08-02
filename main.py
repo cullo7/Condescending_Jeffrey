@@ -1,9 +1,9 @@
+import atexit
 from termcolor import colored
 import subprocess
 import sys
 import time
 import commands as cmd
-import curses
 
 '''
 Main method that calls upon external files to execute functions. Otherwise it runs a while loop until it breaks 
@@ -11,8 +11,14 @@ or quit is entered. Introduces itself to user and briefs user with list of comma
 capabilities
 '''
 
+def exit_handler():
+    print 'My application is ending!'
+    cmd.clear_history("no message")
+
+atexit.register(exit_handler)
+
 if __name__ == '__main__':
-        width = 200
+        width = 20
         color = 'blue'
         if len(sys.argv) < 2:
             subprocess.call(['clear'])
@@ -47,32 +53,8 @@ if __name__ == '__main__':
             time.sleep(2.5)
             print "\n[Jeffrey]: Alright chief what questions do you have? ".center(width, " ")
             
-        stdscr = curses.initscr()
-        curses.noecho()
-        curses.curs_set(0)
-        stdscr.keypad(1)
 	while True:
-            command = ""
-            while True:
-                c = stdscr.getch()
-                print "c" + str(c)
-                if c == curses.KEY_UP: 
-                    last_command = cmd.get_last_command()
-                    stdscr.addstr("[You]:"+str(last_command))
-                    command = last_command
-                elif c == curses.KEY_DOWN:
-                    next_command = cmd.get_next_command()
-                    stdscr.addstr("[You]"+str(next_command))
-                    command = next_command
-                elif c == curses.KEY_ENTER:
-                    curses.endwin()
-                    break
-                else:
-                    print(c)
-                    command += str(c)
-                    stdscr.addstr(command)
-                c = ""
-           
+            command = raw_input("[You]: ")
             # preced Jeffrey speaking with his name
             sys.stdout.write('[Jeffrey]: ')
             
@@ -84,4 +66,3 @@ if __name__ == '__main__':
             # execute command
             cmd.execute(command.strip().lower()) 
             # cmd.execute("how can i...solve a rubiks cube".lower())
-            command = ""
