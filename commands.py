@@ -11,12 +11,7 @@ Contains database commands and interaction. Also handles execution of command en
 delegating to function file or by refusing it due to improper syntax. Finally, contains a method
 to help user by suggesting the mistake in the command
 
-TODO:
-add event catcher for up arrow to get last command
-
 '''
-
-
 
 # descriptions
 command_desc = {
@@ -29,7 +24,8 @@ command_desc = {
     "show my history" : "If you ever want to see the history of all your commands",
     "inspire me" : "Returns an inspirational quote to brighten your day",
     "get insult" : "Returns a smashing insult if you're in need",
-    "help" : "self explanatory"
+    "help" : "self explanatory",
+    "clear history" : "clear history currently stored in database",
 }
 
 # initiate database
@@ -40,6 +36,7 @@ db.execute('''CREATE TABLE IF NOT EXISTS commands
                 (command text, id int)''')
 commands_db.commit()
 current_command_id = 0
+command_count = 0
 
 # lists possible commands and their format, rudely
 def help():
@@ -66,6 +63,43 @@ def get_history(nothing):
         print '{}. {}'.format(row[1], row[0])
         print ""
 
+def get_last_command():
+    global current_command_id
+    if current_command_id == 0:
+        print "Earliest Command"
+    else:
+        current_command_id -=1
+        return get_command(current_command_id)
+
+def get_next_command():
+    global current_command_id
+    if current_command_id == command_count:
+        print "Already at latest command slick"
+    else:
+        current_command_id +=1
+        return get_command(current_command_id)
+
+def get_command(index):
+    db.execute("SELECT command FROM commands WHERE id = (?)", (index)) 
+    com = db.fetchone()
+    print str(com)
+    return com
+
+def increment_command_count():
+    global current_command_id
+    current_command_id+=1    
+    global command_count
+    command_count+=1
+
+def clear_history():
+    db.execute("DELETE FROM commands")
+    commands_db.commit()
+    print "Clearing history...are you trying to hide something?"
+    time.sleep(2)
+    print "Calling 911..."
+    time.sleep(2)
+    print "Just Kidding"
+
 # checks command attempt and tries to suggest what user was trying to enter
 def check_suggestions(attempt):
     attempt = attempt.split(" ")
@@ -87,6 +121,8 @@ def check_suggestions(attempt):
         print "did you mean 'show my history...'?"
     elif attempt[0] == 'who':
         print "did you mean 'who am i...'?"
+    elif attempt[0] == 'clear':
+        print "did you clear history...'?"
     if "..." not in attempt:
         print "You're missing an ellipses ('...')" 
 
@@ -103,8 +139,7 @@ def execute(args_in):
         exit(1)
     
     # logging commands in SQL database
-    global current_command_id
-    current_command_id +=1
+    increment_command_count()
     db.execute("INSERT INTO commands \
                 VALUES (?, ?)", (args_in, current_command_id))
     commands_db.commit()
@@ -118,7 +153,8 @@ def execute(args_in):
         "i want to see" : fn.i_want_to_see, 
         "show my history" : get_history,
         "get insult" : fn.get_insult,
-        "inspire me" : fn.inspire_me
+        "inspire me" : fn.inspire_me,
+        "clear history" : clear_history
     }
 
     args = args_in.split("...")
