@@ -18,7 +18,7 @@ def exit_handler():
 atexit.register(exit_handler)
 
 if __name__ == '__main__':
-        width = 20
+        width = 200
         color = 'blue'
         if len(sys.argv) < 2:
             subprocess.call(['clear'])
@@ -64,5 +64,5 @@ if __name__ == '__main__':
                 continue
 
             # execute command
-            cmd.execute(command.strip().lower()) 
-            # cmd.execute("how can i...solve a rubiks cube".lower())
+            # cmd.execute(command.strip().lower()) 
+            cmd.execute("where is...blah".lower())

@@ -9,6 +9,12 @@ from cStringIO import StringIO
 
 '''
 Contains all the command functions. Each method has an error check to avoid the program breaking.
+
+TODO:
+how old
+finish where is
+get_insult
+inspire me
 '''
 
 temper = 0
@@ -33,12 +39,12 @@ def decrement_temper():
     temper -=1
 
 # finds the country and continent of a chosen city
-def where_is(place):
-   print "Where is" 
+def where_is(city):
+    subprocess.call("./a.out "+city)
 
 # finds the age of a celeb
 def how_old_is(person):
-    print "how old is"
+    pass
 
 # searches for movie and returns short summary and crtic scores
 def how_good_is(movie):
@@ -117,10 +123,6 @@ def i_want_to_see(name):
         print "As you wish.."
     else:
         print "Your search - "+str(not_found[0])+" - did not match any documents"
-
-# might scrap this, kinda vague
-def tell_me_about(thing):
-    print "tell me about it"
 
 # Finds random inspirational quotes
 def inspire_me(nothing):
