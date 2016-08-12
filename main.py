@@ -55,7 +55,7 @@ if __name__ == '__main__':
             
 	while True:
             command = raw_input("[You]: ")
-            # preced Jeffrey speaking with his name
+            # Print Jeffrey's name before he speaks`
             sys.stdout.write('[Jeffrey]: ')
             
             # Jeffrey says something if nothing is entered
@@ -64,5 +64,5 @@ if __name__ == '__main__':
                 continue
 
             # execute command
-            # cmd.execute(command.strip().lower()) 
-            cmd.execute("where is...blah".lower())
+            cmd.execute(command.strip().lower()) 
+            # cmd.execute("where is...Rosendale".lower())

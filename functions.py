@@ -6,6 +6,7 @@ import urllib2 as urllib
 import PIL
 from PIL import Image
 from cStringIO import StringIO
+import subprocess
 
 '''
 Contains all the command functions. Each method has an error check to avoid the program breaking.
@@ -40,7 +41,9 @@ def decrement_temper():
 
 # finds the country and continent of a chosen city
 def where_is(city):
-    subprocess.call("./a.out "+city)
+    print "Let me get that for you sport\n"
+    subprocess.call(["./find_city", city])
+    print "\nAre you satisfied? Of course you aren't, you heathen\n"
 
 # finds the age of a celeb
 def how_old_is(person):
