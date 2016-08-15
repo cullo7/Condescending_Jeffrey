@@ -18,7 +18,9 @@ in a rude way. Another crucial attribute of Jerry is that he can handle almost a
 | how can i       | routes you to video of task         | how can i...start a fire    |
 | who am i        | tells you who you are               | who am i...                 |
 | i want to see   | shows you pictures of subject       | i want to see...a dog       |
-| show my history | prints command history              | show my history...          |
+| show history    | prints command history              | show history...             |
+| clear history   | clears command history              | clear history...            |
+| execute history | executes history command            | execute history...1         |
 | inspire me      | returns inspirational quotes        | inspire me...               |
 | get insult      | returns a world class insult        | get insult...               |
 | help            | shows help menu                     | help                        |
@@ -37,9 +39,16 @@ in a rude way. Another crucial attribute of Jerry is that he can handle almost a
 * webbrowser
 * Pillow
 
+###External Programs:
+* navigator.py - helpful python script that allows you to navigate an html page recieved back from a server after a request
+..* Oftentimes an html pages retrieved from the requests module isn't exactly the same as the one seen
+..* in the source in your browser.
+* find_city.cpp - c++ program that searches through a text file with cities of the world, then looks up their two letter country code
+* no_quotes.c - program I used to clean the text files I downloaded so I could parse them easier
+
 > Dependencies can be installed with pip or found online
 
 ###Run:
 * python main.py or ./run.sh
 
-Written by Aiden Cullo
+Written by Aiden Cullo(cullo7)
