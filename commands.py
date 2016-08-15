@@ -63,6 +63,7 @@ def get_history(nothing):
         print '{}. {}'.format(row[1], row[0])
         print ""
 
+# selecting command from history to execute
 def get_command(index):
     if len(index)  == 0:
         print "Please enter a index"
@@ -78,14 +79,17 @@ def get_command(index):
         else:
             print "no command in history with index"
 
+# increment command count for database
 def increment_command_count():
     global current_command_id
     current_command_id+=1    
 
+# when history is flushed reset command id
 def zero_command_id():
     global current_command_id
     current_command_id = 0
 
+# clear database
 def clear_history(nothing):
     if len(nothing) != 0 and nothing != 'no message':
         print "clear histtory doesn't take any arguments"

@@ -8,7 +8,7 @@ in a rude way. Another crucial attribute of Jerry is that he can handle almost a
 * All commands are stored in sqlite3 database
 * To stop program simply enter 'quit' (this flushes command history)
 * Jeffrey has a 'temper' that will increase when you enter incorrect commands and decrease with correct ones
-* Jeffrey will try to guess what command you wanted amd/or pinpoint the problem in your entry
+* Jeffrey will try to guess what command you wanted and/or pinpoint the problem in your entry
 
 ###Commands:
 | Command         | Function                            | Example                     |
@@ -31,25 +31,15 @@ in a rude way. Another crucial attribute of Jerry is that he can handle almost a
 * Perform useful and interesting functions for the user
 * Be able to handle any possible input from the user
 
-###Dependencies:
-* subprocess
-* termcolor
-* requests
-* lxml
-* urllib2
-* webbrowser
-* Pillow
-* random
-
 ###External Programs:
-* navigator.py - helpful python script that allows you to navigate an html page recieved back from a server after a request
+* navigator.py - helpful python script that allows you to navigate an html page received back from a server after a request
   * oftentimes an html pages retrieved from the requests module isn't exactly the same as the one seen in the source in your browser.
 * find_city.cpp - c++ program that searches through a text file with cities of the world, then looks up their two letter country code
 * no_quotes.c - program I used to clean the text files I downloaded so I could parse them easier
 
-> Dependencies can be installed with pip or found online
 
-###Run:
+###Build and Run:
+* pip install -r requirements.txt
 * python main.py or ./run.sh
 
 Written by Aiden Cullo(cullo7)
