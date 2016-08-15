@@ -13,7 +13,6 @@ Contains all the command functions. Each method has an error check to avoid the 
 
 TODO:
 how old
-finish where is
 get_insult
 inspire me
 '''
@@ -47,7 +46,15 @@ def where_is(city):
 
 # finds the age of a celeb
 def how_old_is(person):
-    pass
+    search = person.split(' ')
+    search = search[0].capitalize() + "_" + search[1].capitalize()
+    page = requests.get("https://en.wikipedia.org/wiki/"+person)
+    tree = html.fromstring(page.content)
+    if tree.xpath('//table[@id="noarticletext"]/tr/td/b/text()')[0] == "Wikipedia does not have an article with this exact name.":
+        print "Sorry I could not find that person"
+    else:
+        age = tree.xpath('//table[@class="infobox biography vcard"]/tr[3]/td/span[3]/text()')[0]
+        print person + str(" is ") + age[5:7] + str(" years old")
 
 # searches for movie and returns short summary and crtic scores
 def how_good_is(movie):
