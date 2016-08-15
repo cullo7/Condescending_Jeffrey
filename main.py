@@ -11,6 +11,7 @@ or quit is entered. Introduces itself to user and briefs user with list of comma
 capabilities
 '''
 
+# Automatically called when the program is exited so a message can be sent 
 def exit_handler():
     print 'My application is ending!'
     cmd.clear_history("no message")
@@ -55,7 +56,8 @@ if __name__ == '__main__':
             
 	while True:
             command = raw_input("[You]: ")
-            # Print Jeffrey's name before he speaks`
+            # Print Jeffrey's name before he speaks
+            # writes to stdout without printing a newline
             sys.stdout.write('[Jeffrey]: ')
             
             # Jeffrey says something if nothing is entered
