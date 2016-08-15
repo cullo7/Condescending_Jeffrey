@@ -10,11 +10,6 @@ import subprocess
 
 '''
 Contains all the command functions. Each method has an error check to avoid the program breaking.
-
-TODO:
-how old
-get_insult
-inspire me
 '''
 
 temper = 0
@@ -139,11 +134,14 @@ def inspire_me(nothing):
     if len(nothing[0]) != 0:
         error("inspire me doesn't take any argument man")
     else:
-        print "You're worthless, hows that"
-
+        page = requests.get('http://www.brainyquote.com/quotes/topics/topic_inspirational.html')
+        tree = html.fromstring(page.content)
+        print tree.xpath('//a[@title="view quote"]/text()')[random.randint(1,26)]
 # returns an insult when you need one
 def get_insult(nothing):
     if len(nothing[0]) != 0:
         error("get insult doesn't take any arguments knave")
     else:
-        print "Coming soon"
+        page = requests.get('http://all-that-is-interesting.com/hilarious-insults#1')
+        tree = html.fromstring(page.content)
+        print tree.xpath('//p[@class="slideshow-caption slideshow-bottom"]/text()')[random.randint(1,45)]    

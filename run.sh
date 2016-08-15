@@ -4,5 +4,5 @@
 # more to do to run the program in the future
 
 g++ -o find_city find_city.cpp
-python main.py -admin
+python main.py
 rm -rf *.pyc find_city 
