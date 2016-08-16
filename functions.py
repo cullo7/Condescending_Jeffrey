@@ -60,9 +60,8 @@ def how_good_is(movie):
         page = requests.get('https://www.rottentomatoes.com/search/?search='+movie)
         tree = html.fromstring(page.content)
         if len(tree.xpath('//h1[@class="center noresults"]/text()')) == 0:
-            ext_link = tree.xpath('//ul[@id="movie_results_ul"]/li[1]/div[@class="media-body media-body-alt"]/div[@class="nomargin media-heading bold"]/a[@class="unstyled articleLink"]/@href')
+            ext_link = tree.xpath('//ul[@class="results_ul"]/li[1]/div[3]/div/a/@href')
             ext_link = ext_link[0]
-            print 'https://www.rottentomatoes.com'+ext_link
             page = requests.get('https://www.rottentomatoes.com'+ext_link)
             tree = html.fromstring(page.content)
             image = raw_input("enter any key to see the image, just press enter to skip to Synopsis")
@@ -72,20 +71,21 @@ def how_good_is(movie):
                 im = StringIO(img_file.read())
                 im = Image.open(im)
                 im.show()
-            print "Title: "+ str(tree.xpath('//meta[@property="og:title"]/@content')[0])
-            print "Summary: "+str(tree.xpath('//p[@class="critic_consensus superPageFontColor"]/text()')[2])
-            print "Critics Score: "+str(tree.xpath('//span[@class="meter-value superPageFontColor"]/span/text()')[0])
-            print "Top Critics Score: "+str(tree.xpath('//span[@class="meter-value superPageFontColor"]/span/text()')[1])
+            try:
+                print "Title: "+ str(tree.xpath('//meta[@property="og:title"]/@content')[0])
+                print "Summary: "+str(tree.xpath('//p[@class="critic_consensus superPageFontColor"]/text()')[2])
+                print "Critics Score: "+str(tree.xpath('//span[@class="meter-value superPageFontColor"]/span/text()')[0])
+                print "Top Critics Score: "+str(tree.xpath('//span[@class="meter-value superPageFontColor"]/span/text()')[1])
+            except:
+                print "No further information on this movie is available"
         else:
             print str(tree.xpath('//h1[@class="center noresults"]/text()')[0])
 
 # queries youtube for users 'how to' request and launches a webbrowser with the url of the first result
 def how_can_i(task):
-    print "task "+task
     if len(task) == 0:
         print "Gotta enter a task squire"
     else:
-        print 'https://www.youtube.com/results?search_query='+'how to '+task
         page = requests.get('https://www.youtube.com/results?search_query='+'how to '+task)
         tree = html.fromstring(page.content)
         if len(tree.xpath('//div[@class="search-message"]/text()')) == 0:
@@ -131,7 +131,7 @@ def i_want_to_see(name):
 
 # Finds random inspirational quotes
 def inspire_me(nothing):
-    if len(nothing[0]) != 0:
+    if len(nothing) != 0:
         error("inspire me doesn't take any argument man")
     else:
         page = requests.get('http://www.brainyquote.com/quotes/topics/topic_inspirational.html')

@@ -52,7 +52,7 @@ def execute_command(path, cmd):
     return path
 
 if __name__ == "__main__":
-    easyTarget = sys.argv[1]
+    easyTarget = "https://www.rottentomatoes.com/search/?search=interstellar"    
     print easyTarget
     page = requests.get(easyTarget)
     tree = html.fromstring(page.content)
